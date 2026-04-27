@@ -79,7 +79,7 @@
         </div>
         <span id="stateBadge" class="status">idle</span>
       </div>
-      <pre id="logBox">No job selected.</pre>
+      <pre id="logBox" tabindex="0">No job selected.</pre>
     </section>
 
     <section class="card">
@@ -88,7 +88,8 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Type</th>
+            <th>Job</th>
+            <th>Run Types</th>
             <th>Status</th>
             <th>School</th>
             <th>Started</th>
@@ -181,7 +182,12 @@
     let selectedJobId = null;
     let loginModalSuppressed = false;
     let currentActive = null;
+    let currentPendingRun = false;
+    let pollTimer = null;
+    let pollInFlight = false;
     const THEME_KEY = "bbsws-theme";
+    const POLL_ACTIVE_MS = 2000;
+    const POLL_HIDDEN_ACTIVE_MS = 10000;
 
     function applyTheme(theme) {
       const next = theme === "dark" ? "dark" : "light";
@@ -294,6 +300,19 @@
       els.loginBackdrop.setAttribute("aria-hidden", "true");
     }
 
+    function isSelectingLogText() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+        return false;
+      }
+
+      const range = selection.getRangeAt(0);
+      const startNode = range.startContainer;
+      const endNode = range.endContainer;
+
+      return els.logBox.contains(startNode) || els.logBox.contains(endNode);
+    }
+
     async function api(path, method = "GET", body = null) {
       const res = await fetch(path, {
         method,
@@ -310,6 +329,7 @@
       const state = await api(`/api/state?school=${encodeURIComponent(school)}`);
 
       const active = state.active;
+      currentPendingRun = !!state.pendingRun;
       setButtonVisibility(active, state.pendingRun, els.school.value, state.sessionStatus);
       currentActive = active;
       if (active) {
@@ -337,10 +357,14 @@
         };
 
         const school = job.metadata?.school || "";
+        const runTypes = job.metadata?.options?.types
+          ? job.metadata.options.types
+          : (job.type === "seed-all" ? "all" : "-");
 
         tr.innerHTML = `
           <td>${job.id}</td>
           <td>${job.type}</td>
+          <td>${runTypes}</td>
           <td>${job.status}</td>
           <td>${school}</td>
           <td>${job.startedAt || ""}</td>
@@ -356,12 +380,66 @@
       await refreshLog();
     }
 
+    function shouldPoll() {
+      return !!(currentActive || currentPendingRun);
+    }
+
+    function getPollIntervalMs() {
+      if (!shouldPoll()) return null;
+      return document.hidden ? POLL_HIDDEN_ACTIVE_MS : POLL_ACTIVE_MS;
+    }
+
+    function scheduleNextPoll(delayMs = getPollIntervalMs()) {
+      if (pollTimer) clearTimeout(pollTimer);
+      if (delayMs == null) {
+        pollTimer = null;
+        return;
+      }
+      pollTimer = setTimeout(() => {
+        pollLoop().catch(() => {});
+      }, delayMs);
+    }
+
+    async function pollLoop() {
+      if (!shouldPoll()) {
+        scheduleNextPoll(null);
+        return;
+      }
+
+      if (pollInFlight) {
+        scheduleNextPoll();
+        return;
+      }
+
+      pollInFlight = true;
+      try {
+        await refreshState();
+      } catch {
+        // Keep polling even if a request fails temporarily.
+      } finally {
+        pollInFlight = false;
+        scheduleNextPoll();
+      }
+    }
+
     async function refreshLog() {
       if (!selectedJobId) return;
       const job = await api(`/api/jobs/${selectedJobId}`);
       badge(job.status);
-      els.logBox.textContent = job.logs || "(no logs yet)";
-      els.logBox.scrollTop = els.logBox.scrollHeight;
+      if (isSelectingLogText()) {
+        return;
+      }
+
+      const nextLogs = job.logs || "(no logs yet)";
+      const shouldStickToBottom = els.logBox.scrollTop + els.logBox.clientHeight >= els.logBox.scrollHeight - 8;
+
+      if (els.logBox.textContent !== nextLogs) {
+        els.logBox.textContent = nextLogs;
+      }
+
+      if (shouldStickToBottom) {
+        els.logBox.scrollTop = els.logBox.scrollHeight;
+      }
     }
 
     async function clickHandler(fn) {
@@ -403,7 +481,10 @@
     };
 
     els.completeLogin.onclick = () => clickHandler(async () => {
-      await api("/api/login/complete", "POST");
+      const res = await api("/api/login/complete", "POST");
+      if (res.resumedRunJobId) {
+        selectedJobId = res.resumedRunJobId;
+      }
       loginModalSuppressed = true;
       closeLoginModal();
       setButtonVisibility(null, null, els.school.value, { status: "checking", detail: "Checking saved auth..." });
@@ -445,6 +526,14 @@
         closeLoginModal();
       }
     });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        refreshState().catch(() => {}).finally(() => scheduleNextPoll());
+      }
+    });
+    window.addEventListener("focus", () => {
+      refreshState().catch(() => {}).finally(() => scheduleNextPoll());
+    });
 
     refreshState().catch((err) => {
       els.stateLine.textContent = `Failed to load state: ${err.message}`;
@@ -453,7 +542,7 @@
     applyTheme(preferredTheme());
     setAdvancedOptionsOpen(false);
     setButtonVisibility(null, null, "", { status: "unknown", detail: "Select a school to check auth." });
-    setInterval(() => refreshState().catch(() => {}), 2000);
+    scheduleNextPoll();
   </script>
 </body>
 </html>

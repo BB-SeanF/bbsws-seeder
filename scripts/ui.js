@@ -451,11 +451,83 @@ export async function fillTinyMceSourceDialog(page, iframeIdSelector, html, time
 export async function waitForBackToList(page, addBtnSelector, timeout = 30000) {
   assertSelector(addBtnSelector, "waitForBackToList");
   const interactionTimeout = getInteractionTimeout(timeout);
+  await waitForSiteModalToClose(page, interactionTimeout, `returning to list for ${addBtnSelector}`);
   try {
     await page.locator(addBtnSelector).waitFor({ state: "visible", timeout: interactionTimeout });
   } catch (error) {
     await assertNotSessionExpired(page, `waitForBackToList(${addBtnSelector})`);
     throw error;
+  }
+}
+
+export async function waitForSiteModalToClose(page, timeout = 30000, actionLabel = "modal action") {
+  const interactionTimeout = getInteractionTimeout(timeout);
+  const modal = page.locator("#site-modal").first();
+
+  if ((await modal.count()) === 0) {
+    return;
+  }
+
+  const finishIfHidden = async () => {
+    await modal.waitFor({ state: "hidden", timeout: interactionTimeout });
+  };
+
+  try {
+    await finishIfHidden();
+    return;
+  } catch {
+    const diagnostics = await page.evaluate(() => {
+      const modalEl = document.querySelector("#site-modal") || document.body;
+      const errorTexts = Array.from(
+        modalEl.querySelectorAll(
+          ".validation-summary-errors, .field-validation-error, .text-danger, .error, .help-block"
+        )
+      )
+        .map((el) => (el.textContent || "").trim())
+        .filter(Boolean);
+
+      const closeClicked = (() => {
+        const controls = Array.from(
+          modalEl.querySelectorAll('button, a, input[type="button"], input[type="submit"], [role="button"]')
+        );
+
+        const target = controls.find((node) => {
+          const id = String(node.id || "").toLowerCase();
+          const cls = String(node.className || "").toLowerCase();
+          const text = String(node.textContent || node.value || "").trim().toLowerCase();
+          const dismiss = String(node.getAttribute?.("data-dismiss") || "").toLowerCase();
+
+          return dismiss === "modal"
+            || id.includes("cancel")
+            || id.includes("close")
+            || cls.includes("close")
+            || text === "cancel"
+            || text === "close";
+        });
+
+        if (!target) return false;
+        target.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+        return true;
+      })();
+
+      return { errorTexts, closeClicked };
+    });
+
+    if (diagnostics.errorTexts.length > 0) {
+      throw new Error(`${actionLabel} validation failed: ${diagnostics.errorTexts.join(" | ")}`);
+    }
+
+    if (!diagnostics.closeClicked) {
+      await page.keyboard.press("Escape").catch(() => {});
+    }
+
+    try {
+      await finishIfHidden();
+    } catch {
+      throw new Error(
+        `${actionLabel} did not close #site-modal within ${interactionTimeout}ms and no visible validation text was found`
+      );
+    }
   }
 }
 

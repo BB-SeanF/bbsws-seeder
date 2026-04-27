@@ -95,6 +95,16 @@ function createJob(type, command, args, metadata = {}) {
   return job;
 }
 
+function deferred() {
+  let resolve;
+  let reject;
+  const promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+}
+
 function appendLog(job, text) {
   if (!text) return;
   job.logs += text;
@@ -128,6 +138,7 @@ function spawnJob({ type, command, args, metadata }) {
   }
 
   const job = createJob(type, command, args, metadata);
+  const completion = deferred();
   const child = spawn(command, args, {
     cwd: rootDir,
     stdio: ["pipe", "pipe", "pipe"],
@@ -138,7 +149,8 @@ function spawnJob({ type, command, args, metadata }) {
     type,
     child,
     jobId: job.id,
-    cancelled: false
+    cancelled: false,
+    completion: completion.promise
   };
 
   child.stdout.on("data", (buf) => appendLog(job, buf.toString()));
@@ -146,6 +158,7 @@ function spawnJob({ type, command, args, metadata }) {
 
   child.on("error", (err) => {
     appendLog(job, `\n[server] process error: ${err.message}\n`);
+    completion.reject(err);
   });
 
   child.on("close", (code) => {
@@ -209,6 +222,13 @@ function spawnJob({ type, command, args, metadata }) {
     if (finishedType === "login") {
       refreshSessionStatus(job.metadata?.school, true);
     }
+
+    completion.resolve({
+      jobId: job.id,
+      type: job.type,
+      exitCode: code,
+      status: job.status
+    });
   });
 
   return job;
@@ -553,8 +573,25 @@ function route(req, res) {
       return;
     }
 
+    const loginCompletion = active.completion;
+    const hadPendingRun = !!pendingRun;
+
     active.child.stdin.write("\n");
-    sendJson(res, 200, { ok: true, message: "Sent Enter to login process" });
+
+    loginCompletion
+      .then(() => {
+        const resumedRunJobId = hadPendingRun && active?.type === "seed-all" ? active.jobId : null;
+        sendJson(res, 200, {
+          ok: true,
+          message: resumedRunJobId
+            ? "Login completed. Resuming queued seeder run."
+            : "Login completed.",
+          resumedRunJobId
+        });
+      })
+      .catch((err) => {
+        sendJson(res, 500, { error: err?.message || "Login completion failed" });
+      });
     return;
   }
 

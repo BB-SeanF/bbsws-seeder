@@ -12,6 +12,7 @@ import {
   ensureLabelActive,
   fillTinyMceSourceDialog,
   waitForBackToList,
+  waitForSiteModalToClose,
   waitForImageInCell,
   categoryExistsBySearch,
   authFileForSchool,
@@ -141,7 +142,7 @@ runSeederWithErrorHandler(async () => {
       }
 
       await clickId(page, cfg.saveItem, timeoutMs);
-      await page.locator("#site-modal").waitFor({ state: "hidden", timeout: timeoutMs });
+  await waitForSiteModalToClose(page, timeoutMs, `saving link item '${item.title}'`);
       await waitForBackToList(page, cfg.addItemBtn, timeoutMs);
       createdItems++;
 
