@@ -582,6 +582,14 @@ function route(req, res) {
         validateTypesOrThrow(options.types);
         await validateSchoolOrThrow(school);
 
+        const authFile = authFileFor(school);
+        if (!fs.existsSync(authFile)) {
+          sendJson(res, 400, {
+            error: `No saved login state found for school '${school}'. Start Login first.`
+          });
+          return;
+        }
+
         const job = startRunJob(school, options);
         sendJson(res, 200, { ok: true, status: "running", jobId: job.id });
       })

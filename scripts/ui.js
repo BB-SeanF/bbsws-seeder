@@ -82,6 +82,14 @@ export function resolveAuthFileForSchool(school, baseDir = process.cwd()) {
  * Create browser context for seeder with auth state
  */
 export async function createSeederContext(authFile, headless = false) {
+  if (!fs.existsSync(authFile)) {
+    const school = path.basename(String(authFile || ""), ".json") || "<schoolname>";
+    throw new Error(
+      `AUTH_MISSING: No saved login state found for school '${school}'. ` +
+      `Run 'npm run login -- --school ${school}' first.`
+    );
+  }
+
   const browser = await chromium.launch({ headless, channel: "chrome" });
   const context = await browser.newContext({ storageState: authFile });
   const page = await context.newPage();
