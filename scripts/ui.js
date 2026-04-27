@@ -1,5 +1,6 @@
 // scripts/ui.js
 import { chromium } from "@playwright/test";
+import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -76,6 +77,28 @@ export function resolveAuthFileForSchool(school, baseDir = process.cwd()) {
   }
 
   return primary;
+}
+
+function schoolArgFromProcess() {
+  const idx = process.argv.indexOf("--school");
+  if (idx === -1) return "";
+  return String(process.argv[idx + 1] || "").trim();
+}
+
+async function runLoginRecoveryForSchool(school) {
+  return new Promise((resolve) => {
+    const child = spawn("node", ["./scripts/login.js", "--school", school], {
+      stdio: "inherit",
+      cwd: process.cwd(),
+      env: process.env
+    });
+
+    child.on("close", (code) => {
+      resolve(code ?? 1);
+    });
+
+    child.on("error", () => resolve(1));
+  });
 }
 
 /**
@@ -232,24 +255,48 @@ export async function categoryExistsBySearch(page, categoryName, searchInputSele
 export async function runSeederWithErrorHandler(asyncFn, typeLabel) {
   let browser;
   let page;
+  const school = schoolArgFromProcess();
+  let retriedAfterAuthMissing = false;
 
-  try {
-    const result = await asyncFn();
-    browser = result.browser;
-    page = result.page;
-    if (browser) {
-      await browser.close();
+  while (true) {
+    try {
+      const result = await asyncFn();
+      browser = result.browser;
+      page = result.page;
+      if (browser) {
+        await browser.close();
+      }
+      process.exit(0);
+    } catch (e) {
+      const message = String(e?.message || e || "");
+      const canAutoRecover =
+        /AUTH_MISSING/.test(message)
+        && !retriedAfterAuthMissing
+        && !!school
+        && process.env.BBSWS_WEB_MODE !== "1";
+
+      if (canAutoRecover) {
+        retriedAfterAuthMissing = true;
+        console.log(`🔐 Missing auth for ${school}. Launching login flow for one automatic retry...`);
+
+        const loginExitCode = await runLoginRecoveryForSchool(school);
+        if (loginExitCode === 0) {
+          console.log(`✅ Login completed. Retrying seed-${typeLabel} once...`);
+          continue;
+        }
+
+        console.error(`❌ Login retry failed (exit code ${loginExitCode}).`);
+      }
+
+      if (page) {
+        await page.screenshot({ path: "error.png", fullPage: true }).catch(() => {});
+      }
+      console.error(`❌ seed-${typeLabel} failed:`, e);
+      if (browser) {
+        await browser.close().catch(() => {});
+      }
+      process.exit(1);
     }
-    process.exit(0);
-  } catch (e) {
-    if (page) {
-      await page.screenshot({ path: "error.png", fullPage: true }).catch(() => {});
-    }
-    console.error(`❌ seed-${typeLabel} failed:`, e);
-    if (browser) {
-      await browser.close().catch(() => {});
-    }
-    process.exit(1);
   }
 }
 

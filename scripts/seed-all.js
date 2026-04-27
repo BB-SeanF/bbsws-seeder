@@ -215,11 +215,14 @@ async function main() {
     let result = await runSeeder(seeder.script);
     let combinedOutput = `${result.output || ""}\n${result.stderr || ""}`;
     const sessionExpired = /SESSION_EXPIRED/.test(combinedOutput);
+    const authMissing = /AUTH_MISSING/.test(combinedOutput);
+    const needsLoginRecovery = sessionExpired || authMissing;
 
-    if (sessionExpired) {
+    if (needsLoginRecovery) {
       if (autoLoginRetry && !loginRecoveryUsed) {
         loginRecoveryUsed = true;
-        console.log("🔐 Session expired. Launching login flow for one automatic retry...");
+        const reasonLabel = authMissing ? "Missing auth" : "Session expired";
+        console.log(`🔐 ${reasonLabel}. Launching login flow for one automatic retry...`);
         const loginExitCode = await runLoginRecovery();
 
         if (loginExitCode === 0) {
@@ -227,8 +230,8 @@ async function main() {
           result = await runSeeder(seeder.script);
           combinedOutput = `${result.output || ""}\n${result.stderr || ""}`;
 
-          if (/SESSION_EXPIRED/.test(combinedOutput)) {
-            console.log(`❌ Session still expired after retry in ${seeder.script}`);
+          if (/SESSION_EXPIRED|AUTH_MISSING/.test(combinedOutput)) {
+            console.log(`❌ Login recovery did not resolve auth issue in ${seeder.script}`);
             break;
           }
 
@@ -243,7 +246,11 @@ async function main() {
         console.log(`❌ Login retry failed (exit code ${loginExitCode}).`);
       }
 
-      console.log(`❌ Stopping early after session expiry in ${seeder.script}`);
+      if (authMissing) {
+        console.log(`❌ Stopping early after missing auth in ${seeder.script}`);
+      } else {
+        console.log(`❌ Stopping early after session expiry in ${seeder.script}`);
+      }
       break;
     }
 
