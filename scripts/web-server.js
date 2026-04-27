@@ -116,7 +116,7 @@ function childEnv() {
 
 function shouldAutoRecoverSession(job, code) {
   if (!job || job.type !== "seed-all" || code === 0) return false;
-  if (!/SESSION_EXPIRED/.test(job.logs || "")) return false;
+  if (!/SESSION_EXPIRED|AUTH_MISSING/.test(job.logs || "")) return false;
 
   const retryCount = Number(job.metadata?.options?._sessionRetryCount || 0);
   return retryCount < 1;
@@ -162,8 +162,10 @@ function spawnJob({ type, command, args, metadata }) {
         ...(job.metadata?.options || {}),
         _sessionRetryCount: Number(job.metadata?.options?._sessionRetryCount || 0) + 1
       };
+      const authMissing = /AUTH_MISSING/.test(job.logs || "");
+      const recoveryReason = authMissing ? "Missing auth" : "Session expired";
 
-      appendLog(job, "\n[server] Session expired. Starting login flow automatically so the run can resume.\n");
+      appendLog(job, `\n[server] ${recoveryReason}. Starting login flow automatically so the run can resume.\n`);
       pendingRun = { school, options };
 
       try {
