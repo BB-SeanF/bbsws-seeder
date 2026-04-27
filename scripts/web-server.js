@@ -584,8 +584,13 @@ function route(req, res) {
 
         const authFile = authFileFor(school);
         if (!fs.existsSync(authFile)) {
-          sendJson(res, 400, {
-            error: `No saved login state found for school '${school}'. Start Login first.`
+          pendingRun = { school, options };
+          const loginJob = startLoginJob(school);
+          sendJson(res, 200, {
+            ok: true,
+            status: "login-required",
+            message: `No saved login state found for school '${school}'. Login started; complete sign-in to continue.`,
+            loginJobId: loginJob.id
           });
           return;
         }
