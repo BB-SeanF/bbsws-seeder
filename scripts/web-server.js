@@ -4,7 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createSeederContext } from "./ui.js";
+import { createSeederContext, resolveAuthFileForSchool } from "./ui.js";
 import { goToCategoryPage } from "./nav.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +13,6 @@ const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "web");
 
 const port = Number(process.env.PORT || 4310);
-const defaultProfile = process.env.BBSWS_DEFAULT_PROFILE || "default";
 
 let nextJobId = 1;
 const jobs = [];
@@ -159,17 +158,16 @@ function spawnJob({ type, command, args, metadata }) {
 
     if (shouldAutoRecoverSession(job, code)) {
       const school = job.metadata?.school;
-      const profile = job.metadata?.profile;
       const options = {
         ...(job.metadata?.options || {}),
         _sessionRetryCount: Number(job.metadata?.options?._sessionRetryCount || 0) + 1
       };
 
       appendLog(job, "\n[server] Session expired. Starting login flow automatically so the run can resume.\n");
-      pendingRun = { school, profile, options };
+      pendingRun = { school, options };
 
       try {
-        const loginJob = startLoginJob(school, profile);
+        const loginJob = startLoginJob(school);
         appendLog(job, `[server] Login job ${loginJob.id} started. Complete BBID and click Complete Login.\n`);
       } catch (err) {
         appendLog(job, `[server] Failed to auto-start login recovery: ${err.message}\n`);
@@ -181,9 +179,9 @@ function spawnJob({ type, command, args, metadata }) {
     if (finishedType === "login" && code === 0 && pendingRun) {
       const next = pendingRun;
       pendingRun = null;
-      refreshSessionStatus(next.school, next.profile, true);
+      refreshSessionStatus(next.school, true);
       try {
-        startRunJob(next.school, next.profile, next.options);
+        startRunJob(next.school, next.options);
       } catch (err) {
         const pendingJob = createJob(
           "seed-all",
@@ -191,7 +189,6 @@ function spawnJob({ type, command, args, metadata }) {
           ["./scripts/seed-all.js"],
           {
             school: next.school,
-            profile: next.profile,
             options: next.options,
             launchedFromPending: true
           }
@@ -208,7 +205,7 @@ function spawnJob({ type, command, args, metadata }) {
     }
 
     if (finishedType === "login") {
-      refreshSessionStatus(job.metadata?.school, job.metadata?.profile, true);
+      refreshSessionStatus(job.metadata?.school, true);
     }
   });
 
@@ -222,15 +219,8 @@ function normalizeSchool(raw) {
     .replace(/[^a-z0-9-]/g, "");
 }
 
-function normalizeProfile(raw) {
-  return String(raw || defaultProfile)
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]/g, "") || defaultProfile;
-}
-
-function authFileFor(school, profile = defaultProfile) {
-  return path.join(rootDir, "auth", profile, `${school}.json`);
+function authFileFor(school) {
+  return resolveAuthFileForSchool(school, rootDir);
 }
 
 function schoolUrlFor(school) {
@@ -298,12 +288,12 @@ async function validateSchoolOrThrow(school) {
   }
 }
 
-async function probeSessionStatus(school, profile = defaultProfile) {
+async function probeSessionStatus(school) {
   if (!school) {
     return { status: "unknown", detail: "Select a school to check auth." };
   }
 
-  const authFile = authFileFor(school, profile);
+  const authFile = authFileFor(school);
   if (!fs.existsSync(authFile)) {
     return { status: "missing", detail: "No saved auth file for this school." };
   }
@@ -326,12 +316,11 @@ async function probeSessionStatus(school, profile = defaultProfile) {
   }
 }
 
-function refreshSessionStatus(school, profile = defaultProfile, force = false) {
+function refreshSessionStatus(school, force = false) {
   const normalizedSchool = normalizeSchool(school);
-  const normalizedProfile = normalizeProfile(profile);
   if (!normalizedSchool) return;
 
-  const key = `${normalizedProfile}:${normalizedSchool}`;
+  const key = normalizedSchool;
   const existing = sessionStatusCache.get(key);
   const isFresh = existing && Date.now() - existing.updatedAt < SESSION_STATUS_TTL_MS;
 
@@ -347,7 +336,7 @@ function refreshSessionStatus(school, profile = defaultProfile, force = false) {
       checkedAt: existing?.value?.checkedAt || null
     },
     updatedAt: existing?.updatedAt || 0,
-    inFlight: probeSessionStatus(normalizedSchool, normalizedProfile)
+    inFlight: probeSessionStatus(normalizedSchool)
       .then((value) => {
         sessionStatusCache.set(key, {
           value: {
@@ -374,9 +363,8 @@ function refreshSessionStatus(school, profile = defaultProfile, force = false) {
   });
 }
 
-function getSessionStatusSnapshot(school, profile = defaultProfile) {
+function getSessionStatusSnapshot(school) {
   const normalizedSchool = normalizeSchool(school);
-  const normalizedProfile = normalizeProfile(profile);
 
   if (!normalizedSchool) {
     return {
@@ -387,12 +375,12 @@ function getSessionStatusSnapshot(school, profile = defaultProfile) {
     };
   }
 
-  const key = `${normalizedProfile}:${normalizedSchool}`;
+  const key = normalizedSchool;
   const existing = sessionStatusCache.get(key);
   const isFresh = existing && Date.now() - existing.updatedAt < SESSION_STATUS_TTL_MS;
 
   if (!existing || !isFresh) {
-    refreshSessionStatus(normalizedSchool, normalizedProfile);
+    refreshSessionStatus(normalizedSchool);
   }
 
   return existing?.value || {
@@ -431,18 +419,18 @@ function validateTypesOrThrow(raw) {
   );
 }
 
-function startLoginJob(school, profile) {
-  const args = ["./scripts/login.js", "--school", school, "--profile", profile];
+function startLoginJob(school) {
+  const args = ["./scripts/login.js", "--school", school];
   return spawnJob({
     type: "login",
     command: "node",
     args,
-    metadata: { school, profile }
+    metadata: { school }
   });
 }
 
-function startRunJob(school, profile, options = {}) {
-  const args = ["./scripts/seed-all.js", "--school", school, "--profile", profile];
+function startRunJob(school, options = {}) {
+  const args = ["./scripts/seed-all.js", "--school", school];
 
   const types = splitTypes(options.types);
   if (types.length > 0) {
@@ -470,7 +458,7 @@ function startRunJob(school, profile, options = {}) {
     type: "seed-all",
     command: "node",
     args,
-    metadata: { school, profile, options }
+    metadata: { school, options }
   });
 }
 
@@ -486,7 +474,6 @@ function getState(school = "") {
   }));
 
   return {
-    defaultProfile,
     active: active
       ? {
           type: active.type,
@@ -494,7 +481,7 @@ function getState(school = "") {
         }
       : null,
     pendingRun,
-    sessionStatus: getSessionStatusSnapshot(school, defaultProfile),
+    sessionStatus: getSessionStatusSnapshot(school),
     recentJobs: recent
   };
 }
@@ -533,7 +520,6 @@ function route(req, res) {
       .then(async (raw) => {
         const body = safeJsonParse(raw) || {};
         const school = normalizeSchool(body.school);
-        const profile = normalizeProfile(body.profile);
 
         if (!school) {
           sendJson(res, 400, { error: "school is required" });
@@ -548,7 +534,7 @@ function route(req, res) {
         await validateSchoolOrThrow(school);
 
         pendingRun = null;
-        const job = startLoginJob(school, profile);
+        const job = startLoginJob(school);
         sendJson(res, 200, {
           ok: true,
           message: "Login started. Complete BBID in the opened browser, then click Complete Login.",
@@ -575,7 +561,6 @@ function route(req, res) {
       .then(async (raw) => {
         const body = safeJsonParse(raw) || {};
         const school = normalizeSchool(body.school);
-        const profile = normalizeProfile(body.profile);
         const options = {
           types: body.types || "",
           preCheck: body.preCheck !== false,
@@ -597,7 +582,7 @@ function route(req, res) {
         validateTypesOrThrow(options.types);
         await validateSchoolOrThrow(school);
 
-        const job = startRunJob(school, profile, options);
+        const job = startRunJob(school, options);
         sendJson(res, 200, { ok: true, status: "running", jobId: job.id });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -645,5 +630,4 @@ function route(req, res) {
 const server = http.createServer(route);
 server.listen(port, () => {
   console.log(`Web runner available at http://localhost:${port}`);
-  console.log(`Default profile: ${defaultProfile}`);
 });

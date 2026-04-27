@@ -1,5 +1,7 @@
 // scripts/ui.js
 import { chromium } from "@playwright/test";
+import fs from "node:fs";
+import path from "node:path";
 
 const verboseBrowserErrors = process.argv.includes("--verbose-browser-errors");
 
@@ -58,6 +60,22 @@ export function toMmDdYyyy(value) {
   const m = String(value).match(iso);
   if (!m) return String(value);
   return `${m[2]}/${m[3]}/${m[1]}`;
+}
+
+export function authFileForSchool(school, baseDir = process.cwd()) {
+  return path.join(baseDir, "auth", `${school}.json`);
+}
+
+export function resolveAuthFileForSchool(school, baseDir = process.cwd()) {
+  const primary = authFileForSchool(school, baseDir);
+  if (fs.existsSync(primary)) return primary;
+
+  for (const profile of ["sean", "default"]) {
+    const legacy = path.join(baseDir, "auth", profile, `${school}.json`);
+    if (fs.existsSync(legacy)) return legacy;
+  }
+
+  return primary;
 }
 
 /**

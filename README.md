@@ -34,16 +34,16 @@ npm install
 ## Login Flow (creates local session state)
 
 ```bash
-npm run login -- --school <schoolname> --profile <profile>
+npm run login -- --school <schoolname>
 ```
 
 Example:
 
 ```bash
-npm run login -- --school sisacademy --profile sean
+npm run login -- --school sisacademy
 ```
 
-This writes local auth state under `auth/<profile>/<school>.json` (ignored by git).
+This writes local auth state under `auth/<school>.json` (ignored by git).
 
 ## Run the Web UI
 
@@ -60,14 +60,14 @@ Then open:
 Examples:
 
 ```bash
-npm run seed:text -- --school <schoolname> --profile <profile> --headless --pre-check
-npm run seed:links -- --school <schoolname> --profile <profile> --headless --pre-check
+npm run seed:text -- --school <schoolname> --headless --pre-check
+npm run seed:links -- --school <schoolname> --headless --pre-check
 ```
 
 Run all seeders:
 
 ```bash
-node scripts/seed-all.js --school <schoolname> --profile <profile> --headless --pre-check
+node scripts/seed-all.js --school <schoolname> --headless --pre-check
 ```
 
 ## Data Files

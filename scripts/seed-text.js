@@ -1,21 +1,34 @@
 // scripts/seed-text.js
 import path from "node:path";
 
-import { requireArg, getArg, getTimeoutMs, getHeadless, hasFlag } from "./cli.js";
+import { requireArg, getTimeoutMs, getHeadless, hasFlag } from "./cli.js";
 import { validateConfig } from "./validate.js";
 import { goToCategoryPage } from "./nav.js";
 import { TYPE_CONFIG } from "./types.js";
-import { clickId, fillId, ensureLabelActive, fillTinyMceSourceDialog, categoryExistsBySearch, createSeederContext, runSeederWithErrorHandler } from "./ui.js";
+import {
+  clickId,
+  fillId,
+  ensureLabelActive,
+  fillTinyMceSourceDialog,
+  categoryExistsBySearch,
+  authFileForSchool,
+  resolveAuthFileForSchool,
+  createSeederContext,
+  runSeederWithErrorHandler
+} from "./ui.js";
 
 import text from "../data/text.json" with { type: "json" };
 
 const school = requireArg("school");
-const profile = getArg("profile", "sean");
 const preCheck = hasFlag("pre-check");
 const headless = getHeadless(false);
 const timeoutMs = getTimeoutMs();
-const authFile = path.join("auth", profile, `${school}.json`);
+const authFile = resolveAuthFileForSchool(school);
 const cfg = TYPE_CONFIG.text;
+
+if (authFile !== authFileForSchool(school)) {
+  console.log(`ℹ️ Using legacy auth state: ${path.relative(process.cwd(), authFile)}`);
+}
 
 validateConfig(cfg, [
   "hash","addCategoryBtn","categoryForm","categoryName","accessGroup","publicLabel",

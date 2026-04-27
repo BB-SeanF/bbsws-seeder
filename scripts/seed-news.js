@@ -2,7 +2,7 @@
 import path from "node:path";
 import fs from "node:fs";
 
-import { requireArg, getArg, getTimeoutMs, hasFlag, getHeadless } from "./cli.js";
+import { requireArg, getTimeoutMs, hasFlag, getHeadless } from "./cli.js";
 import { validateConfig } from "./validate.js";
 import { goToCategoryPage } from "./nav.js";
 import { TYPE_CONFIG } from "./types.js";
@@ -16,6 +16,8 @@ import {
 	fillIfVisible,
 	toMmDdYyyy,
 	categoryExistsBySearch,
+	authFileForSchool,
+	resolveAuthFileForSchool,
 
 	createSeederContext,
 	runSeederWithErrorHandler
@@ -30,13 +32,16 @@ function assertExists(filePath) {
 }
 
 const school = requireArg("school");
-const profile = getArg("profile", "sean");
 const dryRun = hasFlag("dry-run");
 const preCheck = hasFlag("pre-check");
 const headless = getHeadless(false);
 const timeoutMs = getTimeoutMs();
-const authFile = path.join("auth", profile, `${school}.json`);
+const authFile = resolveAuthFileForSchool(school);
 const cfg = TYPE_CONFIG.news;
+
+if (authFile !== authFileForSchool(school)) {
+	console.log(`ℹ️ Using legacy auth state: ${path.relative(process.cwd(), authFile)}`);
+}
 
 validateConfig(
 	cfg,

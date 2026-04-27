@@ -11,6 +11,8 @@ import {
   fillId,
   ensureLabelActive,
   categoryExistsBySearch,
+  authFileForSchool,
+  resolveAuthFileForSchool,
   createSeederContext,
   runSeederWithErrorHandler
 } from "./ui.js";
@@ -18,15 +20,18 @@ import {
 import photosData from "../data/photos.json" with { type: "json" };
 
 const school = requireArg("school");
-const profile = getArg("profile", "sean");
 const preCheck = hasFlag("pre-check");
 
 const headless = getHeadless(false);
 const timeoutMs = getTimeoutMs();
 const albumIndex = Number(getArg("album", "0"));
 
-const authFile = path.join("auth", profile, `${school}.json`);
+const authFile = resolveAuthFileForSchool(school);
 const cfg = TYPE_CONFIG.photo;
+
+if (authFile !== authFileForSchool(school)) {
+  console.log(`ℹ️ Using legacy auth state: ${path.relative(process.cwd(), authFile)}`);
+}
 
 validateConfig(
   cfg,

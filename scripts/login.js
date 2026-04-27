@@ -3,12 +3,11 @@
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
-import { requireArg, getArg } from "./cli.js";
+import { requireArg } from "./cli.js";
 
 const school = requireArg("school");
-const profile = getArg("profile", "sean");
 
-const outDir = path.join("auth", profile);
+const outDir = path.join("auth");
 const outFile = path.join(outDir, `${school}.json`);
 const schoolUrl = `https://${school}.myschoolapp.com/`;
 

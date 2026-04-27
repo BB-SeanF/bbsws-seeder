@@ -6,7 +6,6 @@ import { spawn } from "node:child_process";
 import { requireArg, getArg, hasFlag } from "./cli.js";
 
 const school = requireArg("school");
-const profile = getArg("profile", "sean");
 const stopOnError = hasFlag("stop-on-error");
 const dryRun = hasFlag("dry-run");
 const autoLoginRetry = !hasFlag("no-auto-login-retry");
@@ -186,7 +185,7 @@ async function runLoginRecovery() {
   return new Promise((resolve) => {
     const cmd = "node";
     const loginPath = "./scripts/login.js";
-    const loginArgs = ["--school", school, "--profile", profile];
+    const loginArgs = ["--school", school];
 
     const child = spawn(cmd, [loginPath, ...loginArgs], {
       stdio: "inherit",
@@ -202,7 +201,6 @@ async function runLoginRecovery() {
 async function main() {
   console.log(`🌱 Master Seeding Started`);
   console.log(`School: ${school}`);
-  console.log(`Profile: ${profile}`);
   console.log(`Seeders: ${selectedSeeders.length}`);
   if (requestedTypesRaw) {
     console.log(`Types: ${selectedSeeders.map((s) => s.type).join(", ")}`);
