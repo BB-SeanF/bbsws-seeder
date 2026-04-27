@@ -1,0 +1,60 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | Events | Style Guide - Events",
+      "showBriefDescription": true,
+      "showLongDescription": true,
+      "enableIcalFeed": false,
+      "events": [
+        {
+          "mode": "recurring",
+          "title": "All Day Event",
+          "recurrence": {
+            "pattern": "weekly",
+            "startDate": "4/06/2026",
+            "endAfterCount": 52,
+            "weekly": {
+              "interval": 2,
+              "days": ["wednesday"]
+            }
+          },
+          "details": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+          "longDetails": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
+        },
+        {
+          "mode": "recurring",
+          "title": "Event Item Title Text Appears Here",
+          "recurrence": {
+            "pattern": "weekly",
+            "startDate": "4/06/2026",
+            "startTime": "2:00 PM",
+            "endTime": "3:00 PM",
+            "endAfterCount": 52,
+            "weekly": {
+              "interval": 2,
+              "days": ["wednesday"]
+            }
+          },
+          "details": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+          "longDetails": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
+        },
+        {
+          "mode": "recurring",
+          "title": "Event with No Brief Description Text",
+          "recurrence": {
+            "pattern": "weekly",
+            "startDate": "4/06/2026",
+            "startTime": "2:00 PM",
+            "endTime": "3:30 PM",
+            "endAfterCount": 52,
+            "weekly": {
+              "interval": 2,
+              "days": ["monday"]
+            }
+          },
+          "longDetails": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
+        }
+      ]
+    }
+  ]
+}

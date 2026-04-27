@@ -1,0 +1,134 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | List | Style Guide - Bulleted List",
+      "items": [
+        {
+          "title": "Lorem ipsum dolor sit amet",
+          "shortDescription": "consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Ut enim ad minim veniam,",
+          "shortDescription": "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Duis aute irure dolor in reprehenderit in voluptate",
+          "shortDescription": "velit esse cillum dolore eu fugiat nulla pariatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Cupidatat non proident,",
+          "shortDescription": "sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          "imagePath": "./assets/785x523.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | List | Style Guide - Expandable List Example",
+      "items": [
+        {
+          "title": "List Item Title Text",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item Title Text",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item Title Text",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item Title Text",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | List | Style Guide - List w/Photos",
+      "items": [
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "List Item with Photo",
+          "shortDescription": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.",
+          "imagePath": "./assets/785x523.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | List | Style Guide - Statistics",
+      "items": [
+        {
+          "title": "18",
+          "shortDescription": "Countries Represented",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "21",
+          "shortDescription": "Athletic Teams",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "100%",
+          "shortDescription": "Participation in STEAM courses",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "30",
+          "shortDescription": "Acres of Campus",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "28",
+          "shortDescription": "Zip Codes Represented",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "78%",
+          "shortDescription": "Faculty with Advanced Degrees",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "45%",
+          "shortDescription": "of Students Receive Financial Aid",
+          "imagePath": "./assets/genericIcon.jpg"
+        },
+        {
+          "title": "100%",
+          "shortDescription": "Participation in STEAM courses",
+          "imagePath": "./assets/genericIcon.jpg"
+        }
+      ]
+    }
+  ]
+}

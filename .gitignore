@@ -1,0 +1,9 @@
+node_modules/
+auth/
+.DS_Store
+error.png
+data/scraped/
+*.log
+coverage/
+playwright-report/
+test-results/

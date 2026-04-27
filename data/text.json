@@ -1,0 +1,104 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | Text | Footer Address - Horizontal",
+      "body": "<div><a href=\"https://maps.app.goo.gl/tQ5nWH9B68HXBqRk9\" target=\"_blank\" rel=\"noopener\" data-mce-href=\"https://maps.app.goo.gl/tQ5nWH9B68HXBqRk9\" data-mce-selected=\"inline-boundary\"><b>﻿619 W. Due West Avenue, Madison, TN 37115</b></a>&nbsp;&nbsp;&nbsp;<a href=\"tel:615-868-2600\" data-mce-href=\"tel:615-868-2600\">615-868-2600</a></div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Footer SEO Text",
+      "body": "<div><i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</i></div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Home - HP Intro Text",
+      "body": "<h2 style=\"text-align: center;\" data-mce-style=\"text-align: center;\"><span>Welcome to </span>Goodpasture Christian School</h2><div style=\"text-align: center;\" data-mce-style=\"text-align: center;\">Duis laoreet libero nec viverra viverra. Praesent scelerisque massa quis lobortis fermentum. Sed blandit arcu nec urna pellentesque, ut congue nulla scelerisque.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Alignment Row Heading",
+      "body": "<h2>Alignment Adjustment Rows</h2><div>Used as a means to vertically align content differently from the default top of a content row, these row styles can be used to break out content to highlight it on the page.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Block Styles Heading",
+      "body": "<h2>Block and Border Styles</h2><div>Styles to wrap content in blocks of color, or a border to break out or call attention to content on the page</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Blockquote",
+      "body": "<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Blockquotes & Callouts Heading",
+      "body": "<h2>Blockquotes &amp; Callouts</h2><div>Styles for traditional blockquotes, or simple callout styles</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Callout Text",
+      "body": "Duis vel augue aliquet, convallis eros a, fermentum velit. Suspendisse mattis ante id nunc tristique."
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Carousels Heading",
+      "body": "<h2>Carousel Styles</h2><div>Styles used to transform groups of like content into a carousel presentation. There are both multi and single item carousels, along with variants for content that has images, and ones that can be purely text based, though images will still show if included with the content.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Expandable List Heading",
+      "body": "<h2>Expandable List</h2><div>Accordion style expandable list content</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Headings",
+      "body": "<div class=\"txt-block\"><h2>Heading 2</h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div><div class=\"txt-block\"><h3>Heading 3</h3>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis.</div><div class=\"txt-block\"><h4>Heading 4</h4>Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur</div><div class=\"txt-block\"><h5>Heading 5</h5>Aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt .</div><div class=\"txt-block\"><h6>Heading 6</h6>Ut labore et dolore magnam aliquam quaerat voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Image Grid Header",
+      "body": "<h2>Image Grid Styling</h2><div>Styling for link and list content that sets images up in a grid.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Large Heading w/Eyebrow 1",
+      "body": "<h2><span>Eyebrow Text </span> Heading 2 Text</h2>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Large Text w/Heading 1",
+      "body": "<h1><span>Span Inside Heading</span> Heading 1</h1><div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - List Type Content Heading",
+      "body": "<h2>List Content Styling</h2><div>Styling options for Bulleted Lists, along with Download and Link groups.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Pickers Heading",
+      "body": "<h2>Pickers</h2><div>Unique styling options for picker type content and widgets</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Row Style Text - Content Alignment Bottom",
+      "body": "<h2><span>Content Alignment Row </span> Align Bottom Style</h2><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</div><br><div>Commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Row Style Text - Content Alignment Center",
+      "body": "<h2><span>Content Alignment Row </span> Align Center Style</h2><div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</div><br><div>Commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Sample Table",
+      "body": "<table class=\"cnt-table mce-item-table\" data-mce-selected=\"1\"><thead><tr><th style=\"width: 40%;\" ncwce=\"true\" data-mce-style=\"width: 40%;\">Table Header</th><th ncwce=\"true\">Value</th></tr></thead><tbody><tr><td ncwce=\"true\">Table Data</td><td ncwce=\"true\">Value</td></tr><tr><td ncwce=\"true\">Table Data</td><td ncwce=\"true\">Value</td></tr><tr><td ncwce=\"true\">Table Data</td><td ncwce=\"true\">Value</td></tr><tr><td ncwce=\"true\">Table Data</td><td ncwce=\"true\">Value</td></tr></tbody></table><div id=\"mceResizeHandlenw\" data-mce-bogus=\"all\" class=\"mce-resizehandle\" unselectable=\"true\" data-mce-style=\"cursor: nw-resize; margin: 0px; padding: 0px; left: 11px; top: 11px;\" style=\"cursor: nw-resize; margin: 0px; padding: 0px; left: 11px; top: 11px;\"></div><div id=\"mceResizeHandlene\" data-mce-bogus=\"all\" class=\"mce-resizehandle\" unselectable=\"true\" data-mce-style=\"cursor: ne-resize; margin: 0px; padding: 0px; left: 302.031px; top: 11px;\" style=\"cursor: ne-resize; margin: 0px; padding: 0px; left: 302.031px; top: 11px;\"></div><div id=\"mceResizeHandlese\" data-mce-bogus=\"all\" class=\"mce-resizehandle\" unselectable=\"true\" data-mce-style=\"cursor: se-resize; margin: 0px; padding: 0px; left: 302.031px; top: 192.859px;\" style=\"cursor: se-resize; margin: 0px; padding: 0px; left: 302.031px; top: 192.859px;\"></div><div id=\"mceResizeHandlesw\" data-mce-bogus=\"all\" class=\"mce-resizehandle\" unselectable=\"true\" data-mce-style=\"cursor: sw-resize; margin: 0px; padding: 0px; left: 11px; top: 192.859px;\" style=\"cursor: sw-resize; margin: 0px; padding: 0px; left: 11px; top: 192.859px;\"></div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Sidebar Text w/Button",
+      "body": "<div>Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br><a href=\"#null\" class=\"button\" ncwce=\"true\" data-mce-href=\"#null\">Button</a></div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Single Paragraph",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Tables Heading",
+      "body": "<h2>Tables</h2><div>While no table widget exists, Custom CSS can be written to style tabular data</div>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Text w/Button",
+      "body": "<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et <a>inline link text</a> dolore magna aliqua.</div><br><div>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</div><a class=\"button\">Button</a>"
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Text with Heading and Eyebrow",
+      "body": "<h2><span>Eyebrow Text </span> Heading Text</h2>Duis laoreet libero nec viverra viverra. Praesent scelerisque massa quis lobortis fermentum. Sed blandit arcu nec urna pellentesque, ut congue nulla scelerisque."
+    },
+    {
+      "name": "z. TEST CONTENT | Text | Style Guide - Two Paragraphs",
+      "body": "<div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores<br><br>Eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et.</div>"
+    }
+  ]
+}

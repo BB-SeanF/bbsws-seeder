@@ -1,0 +1,104 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | Links | Button Group",
+      "items": [
+        {
+          "title": "Button",
+          "url": "#null"
+        },
+        {
+          "title": "Another Button",
+          "url": "#null"
+        },
+        {
+          "title": "Last button",
+          "url": "#null"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Links | Footer Links",
+      "items": [
+        {
+          "title": "Contact & Directions",
+          "url": "#null"
+        },
+        {
+          "title": "Privacy Policy",
+          "url": "#null"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Links | Footer Social Media",
+      "items": [
+        {
+          "title": "X (Twitter)",
+          "url": "#null",
+          "primaryImagePath": "./assets/xTwitter.png"
+        },
+        {
+          "title": "Facebook",
+          "url": "#null",
+          "primaryImagePath": "./assets/facebook.png"
+        },
+        {
+          "title": "Instagram",
+          "url": "#null",
+          "primaryImagePath": "./assets/instagram.png"
+        },
+        {
+          "title": "YouTube",
+          "url": "#null",
+          "primaryImagePath": "./assets/youtube.png"
+        },
+        {
+          "title": "Podcast",
+          "url": "#null",
+          "primaryImagePath": "./assets/podcasts.png"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Links | Panel - Sample Panel Image Link",
+      "items": [
+        {
+          "title": "Link Item Title Text",
+          "url": "#null",
+          "description": "This is the link description",
+          "primaryImagePath": "./assets/785x523.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Links | Style Guide - Image Grid - 3 Links",
+      "items": [
+        {
+          "title": "Link Item Title Text",
+          "url": "#null",
+          "description": "<div>Brief Description text to appear on hover. Keep text brief as the height of the image dictates the space the text has to show, which will get smaller across devices.&nbsp;</div>",
+          "primaryImagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Link Item Title Text",
+          "url": "#null",
+          "description": "<div>Brief Description text to appear on hover. Keep text brief as the height of the image dictates the space the text has to show, which will get smaller across devices.&nbsp;</div>",
+          "primaryImagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Link Item Title Text",
+          "url": "#null",
+          "description": "<div>Brief Description text to appear on hover. Keep text brief as the height of the image dictates the space the text has to show, which will get smaller across devices.&nbsp;</div>",
+          "primaryImagePath": "./assets/785x523.jpg"
+        },
+        {
+          "title": "Link Item Title Text",
+          "url": "#null",
+          "description": "<div>Brief Description text to appear on hover. Keep text brief as the height of the image dictates the space the text has to show, which will get smaller across devices.&nbsp;</div>",
+          "primaryImagePath": "./assets/785x523.jpg"
+        }
+      ]
+    }
+  ]
+}

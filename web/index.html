@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BBSWS Seeder Runner</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,500,0,0" />
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-header">
+      <div class="row" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h1>BBSWS Seeder</h1>
+          <div class="sub">Run login + seed flows from a browser. Default run mode is headless, with pre-check and dry-run off.</div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="openLegend" type="button" aria-label="Open help and legend" title="Help and legend">
+            <span class="material-symbols-rounded" aria-hidden="true">help</span>
+          </button>
+          <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span class="material-symbols-rounded" id="themeToggleIcon" aria-hidden="true">light_mode</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="control-bar">
+        <div class="control-field">
+          <label for="school">School</label>
+          <input id="school" type="text" placeholder="schoolname" />
+        </div>
+        <div class="control-field">
+          <label for="types">Types (optional comma list)</label>
+          <input id="types" type="text" placeholder="news,events,text,links,lists,downloads,photos" />
+        </div>
+        <button class="advanced-toggle" id="advancedToggle" type="button" aria-expanded="false" aria-controls="advancedOptionsPanel">Show Advanced Options</button>
+      </div>
+
+      <div class="advanced-panel" id="advancedOptionsPanel" hidden>
+        <div class="advanced-body">
+            <div class="advanced-row">
+              <div class="advanced-field">
+                <label for="timeout">Timeout (ms)</label>
+                <input id="timeout" type="number" min="1000" value="5000" />
+              </div>
+              <div class="advanced-flags">
+                <label><input id="showBrowser" type="checkbox" /> show browser (headed)</label>
+                <label><input id="preCheck" type="checkbox" /> pre-check</label>
+                <label><input id="dryRun" type="checkbox" /> dry-run</label>
+              </div>
+            </div>
+            <div class="session-box" id="sessionBox">
+              <div class="session-title">Session</div>
+              <div class="session-copy">Shows saved auth status for the selected school. If auth expires, start login, finish sign-in in browser, then click Complete Login in the modal.</div>
+              <div class="aux-actions">
+                <button class="btn" id="startLogin">Start Login</button>
+              </div>
+              <div class="session-status" id="sessionStatus">Select a school to check auth.</div>
+            </div>
+          </div>
+      </div>
+
+      <div class="actions-shell">
+        <div class="primary-action">
+          <button class="btn primary" id="runSeed">Run Seeder</button>
+          <button class="btn ghost primary" id="stopSeed">Stop Seeder</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <strong>Current State</strong>
+          <div id="stateLine" class="hint">Loading...</div>
+        </div>
+        <span id="stateBadge" class="status">idle</span>
+      </div>
+      <pre id="logBox">No job selected.</pre>
+    </section>
+
+    <section class="card">
+      <strong>Recent Jobs</strong>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>School</th>
+            <th>Started</th>
+            <th>Ended</th>
+          </tr>
+        </thead>
+        <tbody id="jobsTable"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="legendBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="legendTitle">
+      <div class="row" style="justify-content: space-between; align-items: center;">
+        <h2 id="legendTitle">Runner Help and Legend</h2>
+        <button class="btn ghost" id="closeLegend" type="button">Close</button>
+      </div>
+      <p>This tool wraps the CLI scripts so login and seeding can be run without terminal commands.</p>
+
+      <div class="legend-section">
+        <div class="legend-item"><strong>School:</strong> Subdomain only, for example sisacademy.</div>
+        <div class="legend-item"><strong>Types:</strong> Optional comma list to limit run scope. Empty runs all types.</div>
+        <div class="legend-item"><strong>Timeout (ms):</strong> Per-action Playwright timeout. Lower is faster but less tolerant.</div>
+        <div class="legend-item"><strong>Default mode:</strong> show browser off (headless), pre-check off, dry-run off.</div>
+      </div>
+
+      <div class="legend-section">
+        <div class="legend-item"><strong>pre-check:</strong> Searches for existing categories and skips duplicates.</div>
+        <div class="legend-item"><strong>show browser (headed):</strong> When checked, runs with visible browser windows.</div>
+        <div class="legend-item"><strong>dry-run:</strong> Validates selectors and flow without creating content.</div>
+      </div>
+
+      <div class="legend-section">
+        <div class="legend-item"><strong>Start Login:</strong> Opens BBID login flow in browser.</div>
+        <div class="legend-item"><strong>Complete Login:</strong> In the login modal, sends Enter to the waiting login script after you sign in.</div>
+        <div class="legend-item"><strong>Run Seeder:</strong> Runs seed-all with current options.</div>
+        <div class="legend-item"><strong>Stop Seeder:</strong> Sends stop signal to active process. May take 2-3 seconds to terminate fully.</div>
+      </div>
+
+      <div class="legend-section">
+        <div class="legend-item"><strong>Status badges:</strong> idle (no run), running (active process), completed, failed, stopped (user cancelled).</div>
+        <div class="legend-item"><strong>Recent Jobs:</strong> Click any row to view full logs for that job.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <div class="row" style="justify-content: space-between; align-items: center;">
+        <h2 id="loginTitle">Complete Login</h2>
+        <button class="btn ghost" id="closeLoginModal" type="button">Close</button>
+      </div>
+      <p>Finish BBID sign-in in the opened browser tab or window first.</p>
+      <p>When you are fully signed in to the school site, click Complete Login to send Enter to the login script.</p>
+      <div class="row" style="margin-top: 10px;">
+        <button class="btn alt" id="completeLogin">Complete Login</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const els = {
+      school: document.getElementById("school"),
+      types: document.getElementById("types"),
+      timeout: document.getElementById("timeout"),
+      preCheck: document.getElementById("preCheck"),
+      showBrowser: document.getElementById("showBrowser"),
+      dryRun: document.getElementById("dryRun"),
+      advancedToggle: document.getElementById("advancedToggle"),
+      startLogin: document.getElementById("startLogin"),
+      completeLogin: document.getElementById("completeLogin"),
+      runSeed: document.getElementById("runSeed"),
+      stopSeed: document.getElementById("stopSeed"),
+      advancedOptionsPanel: document.getElementById("advancedOptionsPanel"),
+      sessionBox: document.getElementById("sessionBox"),
+      sessionStatus: document.getElementById("sessionStatus"),
+      loginBackdrop: document.getElementById("loginBackdrop"),
+      closeLoginModal: document.getElementById("closeLoginModal"),
+      themeToggle: document.getElementById("themeToggle"),
+      themeToggleIcon: document.getElementById("themeToggleIcon"),
+      openLegend: document.getElementById("openLegend"),
+      closeLegend: document.getElementById("closeLegend"),
+      legendBackdrop: document.getElementById("legendBackdrop"),
+      stateLine: document.getElementById("stateLine"),
+      stateBadge: document.getElementById("stateBadge"),
+      logBox: document.getElementById("logBox"),
+      jobsTable: document.getElementById("jobsTable")
+    };
+
+    let selectedJobId = null;
+    let loginModalSuppressed = false;
+    let currentActive = null;
+    const THEME_KEY = "bbsws-theme";
+
+    function applyTheme(theme) {
+      const next = theme === "dark" ? "dark" : "light";
+      document.body.setAttribute("data-theme", next);
+      els.themeToggle.setAttribute("aria-pressed", String(next === "dark"));
+      els.themeToggleIcon.textContent = next === "dark" ? "dark_mode" : "light_mode";
+      const nextActionLabel = next === "dark" ? "Switch to light mode" : "Switch to dark mode";
+      els.themeToggle.setAttribute("aria-label", nextActionLabel);
+      els.themeToggle.setAttribute("title", nextActionLabel);
+      localStorage.setItem(THEME_KEY, next);
+    }
+
+    function preferredTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+
+    function setAdvancedOptionsOpen(isOpen) {
+      els.advancedOptionsPanel.hidden = !isOpen;
+      els.advancedToggle.setAttribute("aria-expanded", String(isOpen));
+      els.advancedToggle.textContent = isOpen ? "Close Advanced Options" : "Show Advanced Options";
+    }
+
+    function payload() {
+      return {
+        school: els.school.value.trim(),
+        types: els.types.value.trim(),
+        timeoutMs: Number(els.timeout.value || 5000),
+        preCheck: els.preCheck.checked,
+        headless: !els.showBrowser.checked,
+        dryRun: els.dryRun.checked
+      };
+    }
+
+    function badge(status) {
+      const b = els.stateBadge;
+      b.className = "status";
+      if (status === "running") {
+        b.classList.add("warn");
+        b.textContent = "running";
+      } else if (status === "completed") {
+        b.classList.add("ok");
+        b.textContent = "completed";
+      } else if (status === "failed") {
+        b.classList.add("err");
+        b.textContent = "failed";
+      } else if (status === "stopped") {
+        b.classList.add("stopped");
+        b.textContent = "stopped";
+      } else {
+        b.textContent = "idle";
+      }
+    }
+
+    function sessionContextText(school) {
+      const displaySchool = school && school.trim() ? school.trim() : "(not set)";
+      return `Current School: ${displaySchool}`;
+    }
+
+    function setButtonVisibility(active, pendingRun, school, sessionStatus) {
+      const activeType = active?.type || null;
+      const loginActive = activeType === "login";
+      const runActive = activeType === "seed-all";
+      const contextText = sessionContextText(school);
+
+      els.startLogin.style.display = loginActive ? "none" : "inline-block";
+      
+      if (loginActive) {
+        els.completeLogin.classList.add("pulse");
+      } else {
+        els.completeLogin.classList.remove("pulse");
+      }
+
+      els.runSeed.style.display = runActive ? "none" : "inline-block";
+      els.stopSeed.style.display = runActive ? "inline-block" : "none";
+
+      els.sessionBox.classList.toggle("active", loginActive);
+
+      if (loginActive) {
+        if (pendingRun) {
+          els.sessionStatus.innerHTML = `🔐 <strong>Login Session Expired.</strong> ${contextText}. Finish sign-in in browser, then complete from the login modal.`;
+        } else {
+          els.sessionStatus.textContent = `Login in progress. ${contextText}. Finish sign-in in browser, then complete from the login modal.`;
+        }
+      } else {
+        const authLabelByStatus = {
+          active: "Auth Active",
+          expired: "Auth Expired",
+          missing: "No Saved Auth",
+          checking: "Checking Auth",
+          error: "Auth Check Failed",
+          unknown: "Auth Unknown"
+        };
+        const authLabel = authLabelByStatus[sessionStatus?.status] || "Auth Unknown";
+        const detail = sessionStatus?.detail ? ` | ${sessionStatus.detail}` : "";
+        els.sessionStatus.textContent = `${authLabel} | ${contextText}${detail}`;
+      }
+    }
+
+    function openLoginModal() {
+      els.loginBackdrop.classList.add("open");
+      els.loginBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeLoginModal() {
+      els.loginBackdrop.classList.remove("open");
+      els.loginBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    async function api(path, method = "GET", body = null) {
+      const res = await fetch(path, {
+        method,
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    async function refreshState() {
+      const school = els.school.value.trim();
+      const state = await api(`/api/state?school=${encodeURIComponent(school)}`);
+
+      const active = state.active;
+      setButtonVisibility(active, state.pendingRun, els.school.value, state.sessionStatus);
+      currentActive = active;
+      if (active) {
+        badge("running");
+        els.stateLine.textContent = `Active: ${active.type} (job ${active.jobId})`;
+        if (!selectedJobId) selectedJobId = active.jobId;
+        if (active.type === "login" && !loginModalSuppressed) {
+          openLoginModal();
+          setAdvancedOptionsOpen(true);
+        }
+      } else {
+        loginModalSuppressed = false;
+        els.stateLine.textContent = state.pendingRun
+          ? "Waiting for login completion to auto-start pending run"
+          : "No active process";
+      }
+
+      els.jobsTable.innerHTML = "";
+      for (const job of state.recentJobs || []) {
+        const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.onclick = () => {
+          selectedJobId = job.id;
+          refreshLog();
+        };
+
+        const school = job.metadata?.school || "";
+
+        tr.innerHTML = `
+          <td>${job.id}</td>
+          <td>${job.type}</td>
+          <td>${job.status}</td>
+          <td>${school}</td>
+          <td>${job.startedAt || ""}</td>
+          <td>${job.endedAt || ""}</td>
+        `;
+        els.jobsTable.appendChild(tr);
+      }
+
+      if (!selectedJobId && state.recentJobs && state.recentJobs.length > 0) {
+        selectedJobId = state.recentJobs[0].id;
+      }
+
+      await refreshLog();
+    }
+
+    async function refreshLog() {
+      if (!selectedJobId) return;
+      const job = await api(`/api/jobs/${selectedJobId}`);
+      badge(job.status);
+      els.logBox.textContent = job.logs || "(no logs yet)";
+      els.logBox.scrollTop = els.logBox.scrollHeight;
+    }
+
+    async function clickHandler(fn) {
+      try {
+        await fn();
+        await refreshState();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function openLegend() {
+      els.legendBackdrop.classList.add("open");
+      els.legendBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeLegend() {
+      els.legendBackdrop.classList.remove("open");
+      els.legendBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    els.startLogin.onclick = () => clickHandler(async () => {
+      const p = payload();
+      const res = await api("/api/login/start", "POST", { school: p.school });
+      selectedJobId = res.jobId;
+      loginModalSuppressed = false;
+      openLoginModal();
+      setAdvancedOptionsOpen(true);
+    });
+
+    els.advancedToggle.onclick = () => {
+      const isOpen = els.advancedToggle.getAttribute("aria-expanded") === "true";
+      setAdvancedOptionsOpen(!isOpen);
+    };
+
+    els.themeToggle.onclick = () => {
+      const current = document.body.getAttribute("data-theme") || "light";
+      applyTheme(current === "dark" ? "light" : "dark");
+    };
+
+    els.completeLogin.onclick = () => clickHandler(async () => {
+      await api("/api/login/complete", "POST");
+      loginModalSuppressed = true;
+      closeLoginModal();
+      setButtonVisibility(null, null, els.school.value, { status: "checking", detail: "Checking saved auth..." });
+    });
+
+    els.runSeed.onclick = () => clickHandler(async () => {
+      const p = payload();
+      const res = await api("/api/run", "POST", p);
+      selectedJobId = res.jobId || res.loginJobId || selectedJobId;
+    });
+
+    els.stopSeed.onclick = () => clickHandler(async () => {
+      await api("/api/active/cancel", "POST");
+    });
+
+    els.openLegend.onclick = () => openLegend();
+    els.closeLegend.onclick = () => closeLegend();
+    els.closeLoginModal.onclick = () => clickHandler(async () => {
+      if (currentActive?.type === "login") {
+        await api("/api/active/cancel", "POST");
+      }
+      loginModalSuppressed = true;
+      closeLoginModal();
+      setButtonVisibility(null, null, els.school.value, { status: "checking", detail: "Checking saved auth..." });
+    });
+    els.legendBackdrop.onclick = (event) => {
+      if (event.target === els.legendBackdrop) {
+        closeLegend();
+      }
+    };
+    els.loginBackdrop.onclick = (event) => {
+      if (event.target === els.loginBackdrop) {
+        closeLoginModal();
+      }
+    };
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeLegend();
+        closeLoginModal();
+      }
+    });
+
+    refreshState().catch((err) => {
+      els.stateLine.textContent = `Failed to load state: ${err.message}`;
+      badge("failed");
+    });
+    applyTheme(preferredTheme());
+    setAdvancedOptionsOpen(false);
+    setButtonVisibility(null, null, "", { status: "unknown", detail: "Select a school to check auth." });
+    setInterval(() => refreshState().catch(() => {}), 2000);
+  </script>
+</body>
+</html>

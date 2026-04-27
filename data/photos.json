@@ -1,0 +1,68 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | Photo | Home - HP Hero Images",
+      "album name": "1920 x 1080",
+      "photos": [
+        {
+          "filePath": "./assets/1920x1080.jpg",
+          "title": "Tagline Text Tied to Image",
+          "caption": "This is where you can add a small description."
+        },
+        {
+          "filePath": "./assets/1920x1080.jpg",
+          "title": "Tagline Text Tied to Image",
+          "caption": "This is where you can add a small description."
+        },
+        {
+          "filePath": "./assets/1920x1080.jpg",
+          "title": "Tagline Text Tied to Image",
+          "caption": "This is where you can add a small description."
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Photo | Style Guide - Banner Photos",
+      "album name": "1920 x 640",
+      "photos": [
+        {
+          "filePath": "./assets/1920x640.jpg"
+        },
+        {
+          "filePath": "./assets/1920x640.jpg"
+        },
+        {
+          "filePath": "./assets/1920x640.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Photo | Style Guide - Single Photo 1:1",
+      "album name": "785 x 785",
+      "photos": [
+        {
+          "filePath": "./assets/785x785.jpg",
+          "caption": "Plain photo style. Optional caption text appears under photo in this fashion"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Photo | Style Guide - Single Photo 1:1 - No Caption",
+      "album name": "785 x 785",
+      "photos": [
+        {
+          "filePath": "./assets/785x785.jpg"
+        }
+      ]
+    },
+    {
+      "name": "z. TEST CONTENT | Photo | Style Guide - Single Photo Vert - No Caption",
+      "album name": "785 x 1020",
+      "photos": [
+        {
+          "filePath": "./assets/785x1020.jpg"
+        }
+      ]
+    }
+  ]
+}

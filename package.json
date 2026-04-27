@@ -1,0 +1,20 @@
+{
+  "name": "bbsws-seeder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "web": "node scripts/web-server.js",
+    "login": "node scripts/login.js",
+    "seed:links": "node scripts/seed-links.js",
+    "seed:text": "node scripts/seed-text.js",
+    "seed:lists": "node scripts/seed-lists.js",
+    "seed:downloads": "node scripts/seed-downloads.js",
+    "seed:photos": "node scripts/seed-photos.js",
+    "seed:news": "node scripts/seed-news.js",
+    "seed:events": "node scripts/seed-events.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "categories": [
+    {
+      "name": "z. TEST CONTENT | News | Style Guide - News",
+      "items": [
+        {
+          "title": "News Headline Title Text Appears Here",
+          "date": "2026-04-23",
+          "author": "Author Name",
+          "summary": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur",
+          "body": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur",
+          "photos": [
+            {
+              "filePath": "./assets/785x523.jpg"
+            }
+          ]
+        },
+        {
+          "title": "News Item Title. No Photo",
+          "date": "2026-04-23",
+          "author": "Author",
+          "summary": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur",
+          "body": "Iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur",
+          "photos": []
+        }
+      ]
+    }
+  ]
+}

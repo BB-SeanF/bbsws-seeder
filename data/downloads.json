@@ -1,0 +1,21 @@
+{
+  "categories": [
+    {
+      "name": "z. 2021 TEST CONTENT | Downloads | Sample Downloads",
+      "items": [
+        {
+          "title": "Curabitur augue dui",
+          "filePath": "./assets/genericicon.png"
+        },
+        {
+          "title": "In hac habitasse platea dictumst",
+          "filePath": "./assets/genericicon.png"
+        },
+        {
+          "title": "Nullam ornare tortor ac maximus",
+          "filePath": "./assets/genericicon.png"
+        }
+      ]
+    }
+  ]
+}
